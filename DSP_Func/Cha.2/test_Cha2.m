@@ -1,0 +1,80 @@
+clc, close all;
+clear variables;
+
+%% digital signal display
+% n = [-3,-2,-1,0,1,2,3,4];
+% x = [2,1,-1,0,1,4,3,7];
+% scatter(n,x)
+
+%% impseq & stepseq function
+% [x,n] = impseq(5,0,10);
+% [x,n] = stepseq(5,0,10);
+% scatter(n,x)
+
+%% Real-valued exponential sequence
+% n = (0:10); x = (0.9).^n;
+% scatter(n,x)
+
+%% Complex-valued exponential sequence
+% n = (0:10); x = exp((2+3j)*n);
+% scatter(real(x),imag(x))
+
+%% Sinusoidal sequence
+% n = (0:10); x = 3*cos(0.1*pi*n+pi/3) + 2*sin(0.5*pi*n);
+% scatter(n,x)
+
+%% Periodic sequence
+% P = 5; x = [1,2,3];
+% xtilde = x' * ones(1,P); % P columns of x; x is a row vector
+% xtilde = xtilde(:); % long column vector
+% xtilde = xtilde'; % long row vector
+
+%% sigadd & sigmult function
+% n1 = (-5:5); x1 = (1:11);
+% n2 = (0:9); x2 = (1:10);
+% % [y,n] = sigadd(x1,n1,x2,n2);
+% [y,n] = sigmult(x1,n1,x2,n2);
+
+%% evenodd function
+% n = (2:6); x = (1:5);
+% [xe, xo, m] = evenodd(x,n);
+
+%% conv_m function
+% x = [3, 11, 7, 0, -1, 4, 2]; nx = (-3:3);
+% h = [2, 3, 0, -5, 2, 1]; nh = (-1:4);
+% [y,ny] = conv_m(x,nx,h,nh)
+
+%% crosscorrelation test
+% % noise sequence 1
+% x = [3, 11, 7, 0, -1, 4, 2]; nx = (-3:3); % given signal x(n)
+% [y,ny] = sigshift(x,nx,2); % obtain x(n-2)
+% w = randn(1,length(y)); nw = ny; % generate w(n)
+% [y,ny] = sigadd(y,ny,w,nw); % obtain y(n) = x(n-2) + w(n)
+% [x,nx] = sigfold(x,nx); % obtain x(-n) *** important ***
+% [rxy,nrxy] = conv_m(x,nx,y,ny) % crosscorrelation
+% subplot(1,1,1), subplot(2,1,1); stem(nrxy,rxy)
+% axis([-5,10,-50,250]); xlabel('lag variable l')
+% ylabel('rxy');title('Crosscorrelation:noise sequence 1')
+
+%% Example 2.11
+% b = (1); a = [1,-1,0.9]; n = (-20:120);
+% h = impz(b,a,n);
+% subplot(2,2,1); stem(n,h);
+% title('Impulse Response'); xlabel('n'); ylabel('h(n)');
+%
+% x = stepseq(0,-20,120); s = filter(b,a,x);
+% subplot(2,2,2); stem(n,s);
+% title('Step Response'); xlabel('n'); ylabel('s(n)')
+%
+% imp = impseq(0,-20,120); h1 = filter(b,a,imp);
+% subplot(2,2,3); stem(n,h1)
+% title('Impulse Response'); xlabel('n'); ylabel('h1(n)')
+
+% sum(abs(h)); % the impulse response is absolutely summable
+% z = roots(a); magz = abs(z) % characteristic equation's roots --> less than one
+%% Example 2.12
+% b = (1); a = [1,-0.9];
+% n = -5:50; x = stepseq(0,-5,50) - stepseq(10,-5,50);
+% y = filter(b,a,x);
+% subplot(2,1,2); stem(n,y); title('Output sequence')
+% xlabel('n'); ylabel('y(n)'); axis([-5,50,-0.5,8])
